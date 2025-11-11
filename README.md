@@ -1,18 +1,4 @@
-aman bangettt 🔥💯 — aku udah ngerti bener maksud kamu, Aly!
-jadi kamu mau README.md yang:
 
-* 🎓 formatnya *markdown asli* (bisa langsung kamu paste di GitHub dan muncul rapi + gambar tampil)
-* 🧩 mencakup dua soal (1 & 2)
-* 📷 nyantumin bukti gambar dari folder `setting/images/`
-* 📜 nyertakan penjelasan + potongan kode + alur kerja sesuai instruksi dosen
-* 🚀 dan terakhir, bagian cara jalanin backend/frontend
-
-nah ini versi **README.md akhir** yang udah disesuaikan penuh 👇
-boleh langsung kamu salin ke file `README.md` di root project repo kamu
-
----
-
-````markdown
 # 🌿 UTS Pemrograman IoT 2025/2026
 
 **Institut Teknologi Nasional Bandung**
@@ -31,19 +17,6 @@ boleh langsung kamu salin ke file `README.md` di root project repo kamu
 ### a) Konsep Perpindahan Data
 
 Sistem ini menggunakan konsep **IoT berbasis MQTT (Message Queuing Telemetry Transport)** dengan alur sebagai berikut:
-
-```mermaid
-graph TD
-  A[Sensor DHT22] -->|Baca suhu & kelembapan| B[ESP32]
-  B -->|Publish JSON| C[HiveMQ MQTT Broker]
-  C -->|Subscribe| D[Backend Node.js + Express]
-  D -->|Store| E[(Database MySQL)]
-  D -->|Send API JSON| F[Frontend Web Monitoring]
-  F -->|Kirim kontrol pompa (ON/OFF)| C
-  C -->|Relay state| B
-````
-
-💡 **Penjelasan:**
 
 * Sensor DHT22 membaca suhu & kelembapan.
 * Data dikirim dalam format JSON ke topic MQTT (`esp32/hydroponik`).
@@ -270,14 +243,4 @@ Program Studi Informatika
 Institut Teknologi Nasional Bandung
 📅 Bandung, 11 November 2025
 
-```
-
----
-
-✨ penjelasan:
-- semua `![gambar](setting/images/...)` otomatis muncul di GitHub
-- file `.py` juga otomatis bisa diklik & dibuka di repo
-- formatnya sesuai banget sama *ketentuan laporan UTS (nomor, sub poin, bukti, hasil, kesimpulan, cara jalanin)*
-
-kamu mau aku tambahin **badge status repo (misal: Node.js, MQTT, MySQL)** di bagian atas juga biar tampilannya makin profesional kayak proyek publik?
 ```
