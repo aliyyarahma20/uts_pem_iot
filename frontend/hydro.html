@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoring Hidroponik - IoT Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="fade-in">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        <span>IoT Dashboard</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="monitoring.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Monitoring
+        </a>
+        <a href="analysis.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          Analisis
+        </a>
+        <a href="history.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Riwayat
+        </a>
+        <a href="hydro.html" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+          Hidroponik
+        </a>
+      </div>
+
+      <button class="theme-toggle" id="themeToggle">
+        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="moonIcon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="page-header">
+    <h1>Monitoring Sistem Hidroponik</h1>
+    <p>Pantau suhu, kelembapan, dan kontrol pompa secara real-time</p>
+  </header>
+
+  <main class="container">
+    <!-- Kontrol Pompa -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18V5l12-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="18" cy="16" r="3"/>
+        </svg>
+        <h2>Kontrol Pompa Air</h2>
+      </div>
+      <div class="control-section">
+        <button id="btnOn" class="btn on">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+          Hidupkan Pompa
+        </button>
+        <button id="btnOff" class="btn off">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+          </svg>
+          Matikan Pompa
+        </button>
+      </div>
+      <p id="statusPompa" style="margin-top:15px; text-align:center; font-weight:600; color:var(--text-secondary);">
+        Status: <strong style="color:var(--text-primary);">Menunggu koneksi...</strong>
+      </p>
+    </div>
+
+    <!-- Grafik -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <h2>Grafik Suhu dan Kelembapan</h2>
+      </div>
+      <div class="chart-container" style="height:400px;">
+        <canvas id="hydroChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+        <h2>Data Hidroponik Terkini</h2>
+      </div>
+      <div class="table-container">
+        <table id="hydroTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Suhu (°C)</th>
+              <th>Kelembapan (%)</th>
+              <th>LED Hijau</th>
+              <th>LED Kuning</th>
+              <th>LED Merah</th>
+              <th>Relay</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="8" class="loading">Memuat data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const url = "http://localhost:8000/api/hydro";
+      const ctx = document.getElementById("hydroChart").getContext("2d");
+      const statusText = document.getElementById("statusPompa");
+      let hydroChart;
+
+      // --- Kontrol Pompa ---
+      document.getElementById("btnOn").addEventListener("click", () => kirimPompa("ON"));
+      document.getElementById("btnOff").addEventListener("click", () => kirimPompa("OFF"));
+
+      async function kirimPompa(status) {
+        try {
+          const res = await fetch("http://localhost:8000/api/hydro/control", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+          });
+          const data = await res.json();
+          statusText.innerHTML = `Status: <strong style="color:var(--text-primary);">Pompa ${status}</strong>`;
+          console.log("✅", data.message);
+        } catch (err) {
+          console.error("❌ Gagal kirim status pompa:", err);
+          statusText.innerHTML = `Status: <strong style="color:var(--danger);">Gagal menghubungi server</strong>`;
+        }
+      }
+
+      // --- Load Data Hidro ---
+      async function loadData() {
+        try {
+          const res = await fetch(url);
+          const rows = await res.json();
+
+          if (!rows || rows.length === 0) {
+            console.warn("⚠️ Tidak ada data hidroponik ditemukan.");
+            return;
+          }
+
+          // Update tabel
+          const tbody = document.querySelector("#hydroTable tbody");
+          tbody.innerHTML = "";
+          rows.forEach(r => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${r.id}</td>
+                <td>${r.suhu?.toFixed(2) ?? "-"}</td>
+                <td>${r.humidity ?? "-"}</td>
+                <td>${r.led_green ? "ON" : "OFF"}</td>
+                <td>${r.led_yellow ? "ON" : "OFF"}</td>
+                <td>${r.led_red ? "ON" : "OFF"}</td>
+                <td>${r.relay_state ? "ON" : "OFF"}</td>
+                <td>${new Date(r.ts).toLocaleString("id-ID")}</td>
+              </tr>`;
+          });
+
+          // Data untuk grafik
+          const labels = rows.map(r => new Date(r.ts).toLocaleTimeString("id-ID"));
+          const suhuData = rows.map(r => r.suhu);
+          const humData = rows.map(r => r.humidity);
+
+          // Hapus chart lama
+          if (hydroChart) hydroChart.destroy();
+
+          hydroChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: "Suhu (°C)",
+                  data: suhuData,
+                  borderColor: "#f59e0b",
+                  backgroundColor: "rgba(245,158,11,0.15)",
+                  tension: 0.4,
+                  fill: true,
+                  pointRadius: 3
+                },
+                {
+                  label: "Kelembapan (%)",
+                  data: humData,
+                  borderColor: "#3b82f6",
+                  backgroundColor: "rgba(59,130,246,0.15)",
+                  tension: 0.4,
+                  fill: true,
+                  pointRadius: 3
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: "index", intersect: false },
+              plugins: {
+                legend: { position: "bottom" },
+                tooltip: {
+                  callbacks: {
+                    title: (ctx) => `Data ID ${rows[ctx[0].dataIndex].id}`,
+                    label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  title: { display: true, text: "Waktu" },
+                  ticks: { autoSkip: true, maxTicksLimit: 8 }
+                },
+                y: {
+                  beginAtZero: true,
+                  title: { display: true, text: "Nilai" }
+                }
+              }
+            }
+          });
+
+          console.log("✅ Data hidroponik berhasil diperbarui.");
+        } catch (err) {
+          console.error("❌ Gagal memuat data hidroponik:", err);
+        }
+      }
+
+      // Panggil pertama kali dan update tiap 10 detik
+      loadData();
+      setInterval(loadData, 10000);
+    });
+  </script>
+</body>
+</html>

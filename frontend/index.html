@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Sensor IoT</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body class="fade-in">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        <span>IoT Dashboard</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="monitoring.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Monitoring
+        </a>
+        <a href="analysis.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          Analisis
+        </a>
+        <a href="history.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Riwayat
+        </a>
+        <a href="hydro.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 24V11.2M12 12V16.8M12 12C12 8.46538 9.41462 5.6 6.2 5.6H0.8V10.4C0.8 13.9346 3.38538 16.8 6.8 16.8H12M12 12H16.8C20.3346 12 23.2 9.41462 23.2 5.6V0.8H18.4C14.8654 0.8 12 3.38538 12 7.2V12ZM12 12L18.4 5.6M12 16.8L6.2 10.4"/>
+          </svg>
+          Hidroponik
+        </a>
+      </div>
+
+      <button class="theme-toggle" id="themeToggle">
+        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="moonIcon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="page-header">
+    <h1>Dashboard Pemantauan Sensor IoT</h1>
+    <p>Data real-time dari sistem monitoring lingkungan</p>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Stats Grid -->
+    <div class="grid grid-3">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Suhu Maksimum</span>
+          <div class="stat-icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-value" id="maxTemp">--<span class="stat-unit">°C</span></div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Suhu Minimum</span>
+          <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-value" id="minTemp">--<span class="stat-unit">°C</span></div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Suhu Rata-rata</span>
+          <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-value" id="avgTemp">--<span class="stat-unit">°C</span></div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="20" x2="12" y2="10"/>
+          <line x1="18" y1="20" x2="18" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="16"/>
+        </svg>
+        <h2>Grafik Perbandingan Suhu</h2>
+      </div>
+      <div class="chart-container">
+        <canvas id="avgChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Sensor Data Table -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+        <h2>Data Suhu & Kelembapan Maksimum</h2>
+      </div>
+      <div class="table-container">
+        <table id="sensorTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Suhu</th>
+              <th>Kelembapan</th>
+              <th>Kecerahan</th>
+              <th>Waktu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" class="loading">Memuat data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Month-Year -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <h2>Month-Year Maksimum</h2>
+      </div>
+      <div class="table-container">
+        <table id="monthTable">
+          <tbody>
+            <tr><td class="loading">Memuat data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+  <div class="card-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+    <h2>Kontrol Pompa Air</h2>
+  </div>
+  <div class="control-section">
+    <button id="btnOn" class="btn on">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+      </svg>
+      Hidupkan Pompa
+    </button>
+    <button id="btnOff" class="btn off">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+      </svg>
+      Matikan Pompa
+    </button>
+  </div>
+  <p id="statusPompa" style="margin-top:10px;">Status: <strong>Menunggu koneksi...</strong></p>
+</div>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // --- MQTT CONFIG ---
+  const brokerUrl = "wss://broker.hivemq.com:8884/mqtt";
+  const topicControl = "esp32/pompa";
+  const clientId = "web_dashboard_" + Math.random().toString(16).substring(2, 8);
+
+  const client = mqtt.connect(brokerUrl, {
+    clientId,
+    clean: true,
+    connectTimeout: 4000,
+    reconnectPeriod: 5000
+  });
+
+  const statusEl = document.getElementById("statusPompa");
+  const btnOn = document.getElementById("btnOn");
+  const btnOff = document.getElementById("btnOff");
+
+  // --- Saat terkoneksi ke broker ---
+  client.on("connect", () => {
+    console.log("✅ Terhubung ke HiveMQ Broker");
+    statusEl.innerHTML = "Status: <strong style='color:green;'>Terhubung ke Broker</strong>";
+  });
+
+  client.on("error", (err) => {
+    console.error("❌ MQTT Error:", err);
+    statusEl.innerHTML = "Status: <strong style='color:red;'>Gagal terhubung!</strong>";
+  });
+
+  // --- Tombol kontrol ---
+  btnOn.addEventListener("click", () => {
+    client.publish(topicControl, "ON");
+    statusEl.innerHTML = "Status: <strong style='color:green;'>Pompa HIDUP</strong>";
+  });
+
+  btnOff.addEventListener("click", () => {
+    client.publish(topicControl, "OFF");
+    statusEl.innerHTML = "Status: <strong style='color:red;'>Pompa MATI</strong>";
+  });
+
+  // --- Kalau mau monitor respon balik dari ESP32 (optional) ---
+  client.subscribe(topicControl);
+  client.on("message", (topic, message) => {
+    console.log(`📩 Pesan masuk: ${topic} → ${message}`);
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Real-Time - IoT Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="fade-in">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            <span>IoT Dashboard</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Dashboard
+            </a>
+            <a href="monitoring.html" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Monitoring
+            </a>
+            <a href="analysis.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+            Analisis
+            </a>
+            <a href="history.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Riwayat
+            </a>
+            <a href="hydro.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 24V11.2M12 12V16.8M12 12C12 8.46538 9.41462 5.6 6.2 5.6H0.8V10.4C0.8 13.9346 3.38538 16.8 6.8 16.8H12M12 12H16.8C20.3346 12 23.2 9.41462 23.2 5.6V0.8H18.4C14.8654 0.8 12 3.38538 12 7.2V12ZM12 12L18.4 5.6M12 16.8L6.2 10.4"/>
+              </svg>
+              Hidroponik
+            </a>
+        </div>
+        <button class="theme-toggle" id="themeToggle">
+            <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg id="moonIcon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+        </div>
+    </nav>
+
+  <!-- Header -->
+  <header class="page-header">
+    <h1>Monitoring Sensor Real-Time</h1>
+    <p>Pantau perubahan sensor secara langsung</p>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Chart -->
+    <div class="card">
+        <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            <h2>Grafik Trend Sensor</h2>
+        </div>
+        <div class="chart-container" style="height: 400px;">
+            <canvas id="trendChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Sensor Data Table -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+        <h2>Data Sensor Saat Ini</h2>
+      </div>
+      <div class="table-container">
+        <table id="allDataTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Suhu (°C)</th>
+              <th>Kelembapan (%)</th>
+              <th>Kecerahan (Lux)</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" class="loading">Memuat data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+    <script src="script.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const url = "http://localhost:8000/api/all-sensor";
+  const ctx = document.getElementById("trendChart").getContext("2d");
+  let trendChart; // deklarasi global biar bisa di-destroy
+
+  async function loadData() {
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      // Pastikan ada all_data
+      let rows = data.all_data;
+      if (!rows || rows.length === 0) {
+        console.warn("⚠️ Tidak ada data sensor ditemukan.");
+        return;
+      }
+
+      // Urutkan berdasarkan ID atau timestamp
+      rows.sort((a, b) => a.id - b.id);
+
+      // Update tabel
+      const tbody = document.querySelector("#allDataTable tbody");
+      tbody.innerHTML = "";
+      rows.forEach(r => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${r.id}</td>
+            <td>${r.suhu?.toFixed(2) ?? "-"}</td>
+            <td>${r.humidity ?? "-"}</td>
+            <td>${r.lux ?? "-"}</td>
+            <td>${new Date(r.timestamp).toLocaleString()}</td>
+          </tr>`;
+      });
+
+      // Label dan dataset
+      const labels = rows.map(r => new Date(r.timestamp).toLocaleDateString("id-ID"));
+      const suhuData = rows.map(r => r.suhu);
+      const humData = rows.map(r => r.humidity);
+      const luxData = rows.map(r => r.lux);
+
+      // Hapus chart lama biar gak dobel
+      if (trendChart) {
+        trendChart.destroy();
+      }
+
+      // Render chart baru
+      trendChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Suhu (°C)",
+              data: suhuData,
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245,158,11,0.15)",
+              tension: 0.4,
+              fill: true,
+              pointRadius: 3
+            },
+            {
+              label: "Kelembapan (%)",
+              data: humData,
+              borderColor: "#3b82f6",
+              backgroundColor: "rgba(59,130,246,0.15)",
+              tension: 0.4,
+              fill: true,
+              pointRadius: 3
+            },
+            {
+              label: "Kecerahan (Lux)",
+              data: luxData,
+              borderColor: "#10b981",
+              backgroundColor: "rgba(16,185,129,0.15)",
+              tension: 0.4,
+              fill: true,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { position: "bottom" },
+            tooltip: {
+              callbacks: {
+                title: (ctx) => `Data ID ${rows[ctx[0].dataIndex].id}`,
+                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: "Waktu (Tanggal)" },
+              ticks: { autoSkip: true, maxTicksLimit: 6 }
+            },
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Nilai Sensor" }
+            }
+          }
+        }
+      });
+
+      console.log("✅ Grafik sensor berhasil diperbarui.");
+    } catch (err) {
+      console.error("❌ Gagal memuat data monitoring:", err);
+    }
+  }
+
+  // Load pertama kali
+  loadData();
+
+  // Refresh tiap 10 detik
+  setInterval(loadData, 10000);
+});
+</script>
+
+
+</body>
+</html>

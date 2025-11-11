@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analisis Lingkungan - IoT Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fade-in">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        <span>IoT Dashboard</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="monitoring.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Monitoring
+        </a>
+        <a href="analysis.html" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          Analisis
+        </a>
+        <a href="history.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Riwayat
+        </a>
+        <a href="hydro.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 24V11.2M12 12V16.8M12 12C12 8.46538 9.41462 5.6 6.2 5.6H0.8V10.4C0.8 13.9346 3.38538 16.8 6.8 16.8H12M12 12H16.8C20.3346 12 23.2 9.41462 23.2 5.6V0.8H18.4C14.8654 0.8 12 3.38538 12 7.2V12ZM12 12L18.4 5.6M12 16.8L6.2 10.4"/>
+          </svg>
+          Hidroponik
+        </a>
+      </div>
+
+      <button class="theme-toggle" id="themeToggle">
+        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="moonIcon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="page-header">
+    <h1>Analisis Kondisi Lingkungan</h1>
+    <p>Evaluasi status lingkungan berdasarkan sensor</p>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Status Card -->
+    <div class="card status-analysis" id="statusCard">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <h2>Status Lingkungan</h2>
+      </div>
+      <div class="status-content">
+        <div class="loading">Memuat analisis...</div>
+      </div>
+    </div>
+
+    <!-- Analysis Grid -->
+    <div class="analysis-grid">
+      <!-- Temperature Analysis -->
+      <div class="card">
+        <div class="card-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+          </svg>
+          <h2>Analisis Suhu</h2>
+        </div>
+        <div class="analysis-detail" id="tempAnalysis">
+          <div class="loading">Memuat...</div>
+        </div>
+      </div>
+
+      <!-- Humidity Analysis -->
+      <div class="card">
+        <div class="card-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+          <h2>Analisis Kelembapan</h2>
+        </div>
+        <div class="analysis-detail" id="humidAnalysis">
+          <div class="loading">Memuat...</div>
+        </div>
+      </div>
+
+      <!-- Brightness Analysis -->
+      <div class="card">
+        <div class="card-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <h2>Analisis Kecerahan</h2>
+        </div>
+        <div class="analysis-detail" id="luxAnalysis">
+          <div class="loading">Memuat...</div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="card">
+        <div class="card-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+          <h2>Rekomendasi</h2>
+        </div>
+        <div class="analysis-detail" id="recommendations">
+          <div class="loading">Memuat...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const url = "http://localhost:8000/api/all-sensor";
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        // --- Ambil data komputasi dari API ---
+        const suhu = data.suhu;
+        const hum = data.humidity;
+        const lux = data.lux;
+
+        const suhuRata = parseFloat(suhu.rata).toFixed(2);
+        const humRata = parseFloat(hum.rata).toFixed(2);
+        const luxRata = parseFloat(lux.rata).toFixed(2);
+
+        // --- Status umum lingkungan ---
+        let status = "Normal";
+        let statusClass = "normal";
+        let statusIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>`;
+
+        if (suhuRata > 35) {
+          status = "Panas";
+          statusClass = "danger";
+          statusIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>`;
+        } else if (suhuRata < 20) {
+          status = "Dingin";
+          statusClass = "warning";
+        } else if (humRata < 30) {
+          status = "Kering";
+          statusClass = "warning";
+        } else if (luxRata < 10) {
+          status = "Gelap";
+          statusClass = "warning";
+        }
+
+        // --- Status card ---
+        document.querySelector("#statusCard .status-content").innerHTML = `
+          <div class="status-main">
+            <div class="status-icon-large ${statusClass}">
+              ${statusIcon}
+            </div>
+            <h3>Status: <span class="status-badge ${statusClass}">${status}</span></h3>
+            <div class="status-metrics">
+              <div class="metric"><span class="metric-label">Suhu Rata-rata</span><span class="metric-value">${suhuRata}°C</span></div>
+              <div class="metric"><span class="metric-label">Kelembapan Rata-rata</span><span class="metric-value">${humRata}%</span></div>
+              <div class="metric"><span class="metric-label">Kecerahan Rata-rata</span><span class="metric-value">${luxRata} lux</span></div>
+            </div>
+          </div>
+        `;
+
+        // --- Analisis Suhu (DENGAN MIN MAX RATA) ---
+        const tempStatus = suhuRata > 35 ? "tinggi" : suhuRata < 20 ? "rendah" : "optimal";
+        const tempMessage = suhuRata > 35
+          ? "Suhu terlalu tinggi, pertimbangkan pendinginan ruangan."
+          : suhuRata < 20
+          ? "Suhu terlalu rendah, pertimbangkan pemanasan ruangan."
+          : "Suhu dalam rentang ideal dan stabil.";
+
+        document.getElementById("tempAnalysis").innerHTML = `
+          <div class="stats-grid">
+            <div class="stat-box min">
+              <div class="stat-label">Minimum</div>
+              <div class="stat-value">${suhu.min}</div>
+              <div class="stat-unit">°C</div>
+            </div>
+            <div class="stat-box rata">
+              <div class="stat-label">Rata-rata</div>
+              <div class="stat-value">${suhu.rata}</div>
+              <div class="stat-unit">°C</div>
+            </div>
+            <div class="stat-box max">
+              <div class="stat-label">Maximum</div>
+              <div class="stat-value">${suhu.max}</div>
+              <div class="stat-unit">°C</div>
+            </div>
+          </div>
+          <div class="analysis-message ${tempStatus}">${tempMessage}</div>
+        `;
+
+        // --- Analisis Kelembapan (DENGAN MIN MAX RATA) ---
+        const humStatus = humRata > 70 ? "tinggi" : humRata < 30 ? "rendah" : "optimal";
+        const humMessage = humRata > 70
+          ? "Kelembapan terlalu tinggi, bisa memicu jamur dan ketidaknyamanan."
+          : humRata < 30
+          ? "Kelembapan rendah, udara terlalu kering."
+          : "Kelembapan berada pada tingkat ideal.";
+
+        document.getElementById("humidAnalysis").innerHTML = `
+          <div class="stats-grid">
+            <div class="stat-box min">
+              <div class="stat-label">Minimum</div>
+              <div class="stat-value">${hum.min}</div>
+              <div class="stat-unit">%</div>
+            </div>
+            <div class="stat-box rata">
+              <div class="stat-label">Rata-rata</div>
+              <div class="stat-value">${hum.rata}</div>
+              <div class="stat-unit">%</div>
+            </div>
+            <div class="stat-box max">
+              <div class="stat-label">Maximum</div>
+              <div class="stat-value">${hum.max}</div>
+              <div class="stat-unit">%</div>
+            </div>
+          </div>
+          <div class="analysis-message ${humStatus}">${humMessage}</div>
+        `;
+
+        // --- Analisis Kecerahan (DENGAN MIN MAX RATA) ---
+        const luxStatus = luxRata > 1000 ? "tinggi" : luxRata < 10 ? "rendah" : "optimal";
+        const luxMessage = luxRata > 1000
+          ? "Pencahayaan terlalu terang, kurangi intensitas cahaya."
+          : luxRata < 10
+          ? "Pencahayaan kurang, tambahkan sumber cahaya."
+          : "Kecerahan cukup dan nyaman.";
+
+        document.getElementById("luxAnalysis").innerHTML = `
+          <div class="stats-grid">
+            <div class="stat-box min">
+              <div class="stat-label">Minimum</div>
+              <div class="stat-value">${lux.min}</div>
+              <div class="stat-unit">lux</div>
+            </div>
+            <div class="stat-box rata">
+              <div class="stat-label">Rata-rata</div>
+              <div class="stat-value">${lux.rata}</div>
+              <div class="stat-unit">lux</div>
+            </div>
+            <div class="stat-box max">
+              <div class="stat-label">Maximum</div>
+              <div class="stat-value">${lux.max}</div>
+              <div class="stat-unit">lux</div>
+            </div>
+          </div>
+          <div class="analysis-message ${luxStatus}">${luxMessage}</div>
+        `;
+
+        // --- Rekomendasi Umum ---
+        const rec = [];
+        if (suhuRata > 35) rec.push("Aktifkan AC atau sistem pendingin.");
+        if (suhuRata < 20) rec.push("Gunakan pemanas ruangan.");
+        if (humRata < 30) rec.push("Gunakan humidifier.");
+        if (humRata > 70) rec.push("Gunakan dehumidifier atau tingkatkan ventilasi.");
+        if (luxRata < 10) rec.push("Tambahkan pencahayaan ruangan.");
+        if (luxRata > 1000) rec.push("Kurangi pencahayaan agar tidak menyilaukan.");
+        if (rec.length === 0) rec.push("Kondisi lingkungan stabil dan optimal.");
+
+        document.getElementById("recommendations").innerHTML = `
+          <ul class="recommendation-list">
+            ${rec.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+        `;
+
+      } catch (err) {
+        console.error("❌ Gagal memuat data analisis:", err);
+        document.querySelector("#statusCard .status-content").innerHTML =
+          "<div class='error'>Gagal memuat data dari server.</div>";
+      }
+    });
+  </script>
+
+</body>
+</html>
